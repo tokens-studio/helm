@@ -1,5 +1,7 @@
 # Goalert Helm Chart
 
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/tokens-studio)](https://artifacthub.io/packages/search?repo=tokens-studio)
+
 This is an unofficial Helm chart for Goalert.
 
 ## Prerequisites

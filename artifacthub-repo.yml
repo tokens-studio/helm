@@ -9,6 +9,6 @@
 # when the hash of the last commit in the branch you set up changes. This does
 # NOT apply to ownership claim operations, which are processed immediately.
 #
-repositoryID: tokens-studio
+repositoryID: 536dc1b6-694c-4056-86b7-1cb100216ea9
 owners: # (optional, used to claim repository ownership)
   - name: SorsOps
