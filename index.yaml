@@ -3,6 +3,46 @@ entries:
   goalert:
   - annotations:
       artifacthub.io/category: monitoring-logging
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/test/pgp_keys.asc
+      artifacthub.io/valuesSchema: "true"
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: v0.32.0
+    created: "2024-09-25T17:39:05.589301903Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.x.x
+    description: Goalert is an open source IRM solution
+    digest: 491ebb0ca194403f8721fea743b39487b7ce38de2d9edb5ee97a8713f4a44db6
+    home: https://github.com/target/goalert
+    icon: https://raw.githubusercontent.com/target/goalert/master/web/src/app/public/icons/favicon-128.png
+    keywords:
+    - on-call
+    - scheduling
+    - escalations
+    - notifications
+    - alerting
+    - incident-response
+    - sms
+    - voice-calls
+    - automation
+    - irm
+    - incident-management
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: goalert
+    sources:
+    - https://github.com/target/goalert
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.3/goalert-0.0.3.tgz
+    version: 0.0.3
+  - annotations:
+      artifacthub.io/category: monitoring-logging
       artifacthub.io/valuesSchema: "true"
       licenses: Apache-2.0
     apiVersion: v2
@@ -75,4 +115,4 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.1/goalert-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-25T16:42:02.988574796Z"
+generated: "2024-09-25T17:39:05.589317492Z"
