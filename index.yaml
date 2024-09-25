@@ -1,0 +1,41 @@
+apiVersion: v1
+entries:
+  goalert:
+  - annotations:
+      artifacthub.io/valuesSchema: "true"
+      category: Alert
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: v0.32.0
+    created: "2024-09-25T15:29:50.150452152Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.x.x
+    description: Goalert is an open source IRM solution
+    digest: 6e9ae31c69257d54ef6b946d72f130e0c64480e51a4cebc38a54d038f7fce2d2
+    home: https://github.com/target/goalert
+    icon: https://raw.githubusercontent.com/target/goalert/master/web/src/app/public/icons/favicon-128.png
+    keywords:
+    - on-call
+    - scheduling
+    - escalations
+    - notifications
+    - alerting
+    - incident-response
+    - sms
+    - voice-calls
+    - automation
+    - irm
+    - incident-management
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: goalert
+    sources:
+    - https://github.com/target/goalert
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.1/goalert-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-09-25T15:29:50.150460608Z"
