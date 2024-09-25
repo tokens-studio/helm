@@ -2,7 +2,6 @@ apiVersion: v2
 appVersion: "v0.32.0"
 description: Goalert is an open source IRM solution
 home: https://github.com/target/goalert
-
 icon: https://raw.githubusercontent.com/target/goalert/master/web/src/app/public/icons/favicon-128.png
 maintainers:
   - email: andrew@hyma.io
