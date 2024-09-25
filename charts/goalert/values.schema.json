@@ -1,0 +1,406 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "required": [
+    "replicaCount",
+    "imagePullSecrets",
+    "nameOverride",
+    "fullnameOverride",
+    "goalert",
+    "podAnnotations",
+    "podSecurityContext",
+    "securityContext",
+    "resources",
+    "nodeSelector",
+    "tolerations",
+    "affinity"
+  ],
+  "properties": {
+    "replicaCount": {
+      "type": [
+        "number"
+      ],
+      "title": "of replica pods to run",
+      "default": "1"
+    },
+    "image": {
+      "type": "object",
+      "required": [
+        "repository",
+        "pullPolicy",
+        "tag"
+      ],
+      "properties": {
+        "repository": {
+          "type": [
+            "string"
+          ],
+          "title": "image repository for GoAlert",
+          "default": "goalert/goalert"
+        },
+        "pullPolicy": {
+          "type": [
+            "string"
+          ],
+          "title": "pull policy for Kubernetes",
+          "default": "IfNotPresent"
+        },
+        "tag": {
+          "type": [
+            "string"
+          ],
+          "title": "the image tag. If empty, uses the chart appVersion"
+        }
+      }
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "title": "of image pull secrets",
+      "items": {
+        "type": [
+          "string"
+        ]
+      }
+    },
+    "nameOverride": {
+      "type": [
+        "string"
+      ],
+      "title": "the name of the chart"
+    },
+    "fullnameOverride": {
+      "type": [
+        "string"
+      ],
+      "title": "the full name of the chart"
+    },
+    "goalert": {
+      "type": "object",
+      "required": [
+        "existingSecret"
+      ],
+      "properties": {
+        "existingSecret": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": [
+                "string"
+              ],
+              "title": "of an existing Kubernetes secret to use"
+            },
+            "keys": {
+              "type": "object",
+              "required": [
+                "GOALERT_DB_URL",
+                "GOALERT_DATA_ENCRYPTION_KEY"
+              ],
+              "properties": {
+                "GOALERT_DB_URL": {
+                  "type": [
+                    "string"
+                  ],
+                  "title": "in the secret for the database URL",
+                  "default": "\"GOALERT_DB_URL\""
+                },
+                "GOALERT_DATA_ENCRYPTION_KEY": {
+                  "type": [
+                    "string"
+                  ],
+                  "title": "in the secret for the data encryption key",
+                  "default": "\"GOALERT_DATA_ENCRYPTION_KEY\""
+                }
+              }
+            }
+          }
+        },
+        "environment": {
+          "type": "object",
+          "required": [
+            "GOALERT_DB_URL",
+            "GOALERT_DATA_ENCRYPTION_KEY",
+            "GOALERT_LISTEN"
+          ],
+          "properties": {
+            "GOALERT_DB_URL": {
+              "type": [
+                "string"
+              ],
+              "title": "URL for GoAlert"
+            },
+            "GOALERT_DATA_ENCRYPTION_KEY": {
+              "type": [
+                "string"
+              ],
+              "title": "encryption key for GoAlert"
+            },
+            "GOALERT_LISTEN": {
+              "type": [
+                "number"
+              ],
+              "title": "on which GoAlert should listen",
+              "default": "8081"
+            }
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": [
+            "boolean"
+          ],
+          "title": "to enable the bundled PostgreSQL database",
+          "default": "true"
+        },
+        "auth": {
+          "type": "object",
+          "required": [
+            "database",
+            "username",
+            "password",
+            "sslmode"
+          ],
+          "properties": {
+            "database": {
+              "type": [
+                "string"
+              ],
+              "title": "of the database to create",
+              "default": "goalert"
+            },
+            "username": {
+              "type": [
+                "string"
+              ],
+              "title": "for the database",
+              "default": "goalert"
+            },
+            "password": {
+              "type": [
+                "string"
+              ],
+              "title": "for the database user",
+              "default": "\"example\""
+            },
+            "sslmode": {
+              "type": [
+                "string"
+              ],
+              "title": "mode for database connection",
+              "default": "require"
+            }
+          }
+        },
+        "service": {
+          "type": "object",
+          "required": [
+            "port"
+          ],
+          "properties": {
+            "port": {
+              "type": [
+                "number"
+              ],
+              "title": "on which PostgreSQL service is exposed",
+              "default": "5432"
+            }
+          }
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "required": [
+        "create",
+        "annotations",
+        "name"
+      ],
+      "properties": {
+        "create": {
+          "type": [
+            "boolean"
+          ],
+          "title": "to create a service account",
+          "default": "true"
+        },
+        "annotations": {
+          "type": [
+            "object"
+          ],
+          "title": "to add to the service account"
+        },
+        "name": {
+          "type": [
+            "string"
+          ],
+          "title": "name of the service account to use. If not set and create is true, a name is generated using the fullname template"
+        }
+      }
+    },
+    "podAnnotations": {
+      "type": [
+        "object"
+      ],
+      "title": "to add to the pod"
+    },
+    "podSecurityContext": {
+      "type": [
+        "object"
+      ],
+      "title": "context for the pod"
+    },
+    "securityContext": {
+      "type": [
+        "object"
+      ],
+      "title": "context for the container"
+    },
+    "service": {
+      "type": "object",
+      "required": [
+        "type",
+        "port"
+      ],
+      "properties": {
+        "type": {
+          "type": [
+            "string"
+          ],
+          "title": "of Kubernetes service to create",
+          "default": "ClusterIP"
+        },
+        "port": {
+          "type": [
+            "number"
+          ],
+          "title": "on which the service is exposed",
+          "default": "8081"
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "className",
+        "annotations",
+        "hosts",
+        "tls"
+      ],
+      "properties": {
+        "enabled": {
+          "type": [
+            "boolean"
+          ],
+          "title": "to create an Ingress resource",
+          "default": "false"
+        },
+        "className": {
+          "type": [
+            "string"
+          ],
+          "title": "class name"
+        },
+        "annotations": {
+          "type": [
+            "object"
+          ],
+          "title": "for the Ingress resource"
+        },
+        "hosts": {
+          "type": "array",
+          "title": "of hosts for the Ingress",
+          "items": {
+            "type": [
+              "object"
+            ]
+          }
+        },
+        "tls": {
+          "type": "array",
+          "title": "configuration for the Ingress",
+          "items": {
+            "type": [
+              "object"
+            ]
+          }
+        }
+      }
+    },
+    "resources": {
+      "type": [
+        "object"
+      ],
+      "title": "requests and limits for the container"
+    },
+    "autoscaling": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "minReplicas",
+        "maxReplicas",
+        "targetCPUUtilizationPercentage"
+      ],
+      "properties": {
+        "enabled": {
+          "type": [
+            "boolean"
+          ],
+          "title": "to enable autoscaling",
+          "default": "false"
+        },
+        "minReplicas": {
+          "type": [
+            "number"
+          ],
+          "title": "number of replicas when autoscaling",
+          "default": "1"
+        },
+        "maxReplicas": {
+          "type": [
+            "number"
+          ],
+          "title": "number of replicas when autoscaling",
+          "default": "100"
+        },
+        "targetCPUUtilizationPercentage": {
+          "type": [
+            "number"
+          ],
+          "title": "CPU utilization percentage for autoscaling",
+          "default": "80"
+        }
+      }
+    },
+    "nodeSelector": {
+      "type": [
+        "object"
+      ],
+      "title": "selector for pod assignment"
+    },
+    "tolerations": {
+      "type": "array",
+      "title": "for pod assignment",
+      "items": {
+        "type": [
+          "object"
+        ]
+      }
+    },
+    "affinity": {
+      "type": [
+        "object"
+      ],
+      "title": "settings for pod assignment"
+    }
+  }
+}
