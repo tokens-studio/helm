@@ -11,4 +11,5 @@
 #
 repositoryID: 536dc1b6-694c-4056-86b7-1cb100216ea9
 owners: # (optional, used to claim repository ownership)
-  - name: SorsOps
+  - name: AndrewAtTokensStudio
+    email: andrew@hyma.io
