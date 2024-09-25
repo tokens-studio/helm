@@ -9,7 +9,7 @@ maintainers:
 name: goalert
 sources:
   - https://github.com/target/goalert
-version: 0.0.2
+version: 0.0.3
 dependencies:
   - name: postgresql
     version: 15.x.x
