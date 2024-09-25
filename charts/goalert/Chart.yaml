@@ -9,7 +9,7 @@ maintainers:
 name: goalert
 sources:
   - https://github.com/target/goalert
-version: 0.0.1
+version: 0.0.2
 dependencies:
   - name: postgresql
     version: 15.x.x
@@ -18,7 +18,7 @@ dependencies:
 annotations:
      artifacthub.io/valuesSchema: "true"
      licenses: Apache-2.0
-     category: Alert
+     artifacthub.io/category: monitoring-logging
 keywords:
   - on-call
   - scheduling

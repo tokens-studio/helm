@@ -121,8 +121,7 @@
           "type": "object",
           "required": [
             "GOALERT_DB_URL",
-            "GOALERT_DATA_ENCRYPTION_KEY",
-            "GOALERT_LISTEN"
+            "GOALERT_DATA_ENCRYPTION_KEY"
           ],
           "properties": {
             "GOALERT_DB_URL": {
@@ -136,13 +135,6 @@
                 "string"
               ],
               "title": "encryption key for GoAlert"
-            },
-            "GOALERT_LISTEN": {
-              "type": [
-                "number"
-              ],
-              "title": "on which GoAlert should listen",
-              "default": "8081"
             }
           }
         }
