@@ -1,0 +1,19 @@
+{
+  "name": "@tokens-studio/helm-chart-root",
+  "homepage": "https://github.com/tokens-studio/helm",
+  "license": "MPL-2.0",
+  "private": true,
+  "engineStrict": true,
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "charts/*"
+  ],
+  "scripts": {
+  
+  },
+  "devDependencies": {
+  }
+}

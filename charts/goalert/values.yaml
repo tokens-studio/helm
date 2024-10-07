@@ -1,107 +1,144 @@
+## @section Global parameters 
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## @skip global.imageRegistry Global Docker image registry
+## @skip global.imagePullSecrets Global Docker registry secret names as an array
+## @skip global.storageClass Global StorageClass for Persistent Volume(s)
+##
 
-# @param {number} Number of replica pods to run 
-replicaCount: 1
 
+## @section Image parameters
+
+## @param image.repository Docker image repository for GoAlert
+## @param image.pullPolicy Image pull policy for Kubernetes
+## @param image.tag Overrides the image tag. If empty, uses the chart appVersion
+##
 image:
-  # @param {string} Docker image repository for GoAlert 
   repository: goalert/goalert
-  # @param {string} Image pull policy for Kubernetes 
   pullPolicy: IfNotPresent
-  # @param {string} Overrides the image tag. If empty, uses the chart appVersion 
   tag: ""
 
-# @param {string[]} List of image pull secrets 
+## @param imagePullSecrets List of image pull secrets
+## @param nameOverride Override the name of the chart
+## @param fullnameOverride Override the full name of the chart
+##
 imagePullSecrets: []
-# @param {string} Override the name of the chart 
 nameOverride: ""
-# @param {string} Override the full name of the chart 
 fullnameOverride: ""
 
-# @section GoAlert
+## @section GoAlert parameters
+
+## @param goalert.existingSecret.name Name of an existing Kubernetes secret to use
+## @param goalert.existingSecret.keys.GOALERT_DB_URL Key in the secret for the database URL
+## @param goalert.existingSecret.keys.GOALERT_DATA_ENCRYPTION_KEY Key in the secret for the data encryption key
+##
 goalert: 
   existingSecret:
-    # @param {string} Name of an existing Kubernetes secret to use 
     name: ""
     keys:
-      # @param {string} Key in the secret for the database URL 
       GOALERT_DB_URL: "GOALERT_DB_URL"
-      # @param {string} Key in the secret for the data encryption key 
       GOALERT_DATA_ENCRYPTION_KEY: "GOALERT_DATA_ENCRYPTION_KEY"
 
+  ## @param goalert.environment.GOALERT_DB_URL Database URL for GoAlert
+  ## @param goalert.environment.GOALERT_DATA_ENCRYPTION_KEY Data encryption key for GoAlert
+  ##
   environment:
-    # @param {string} Database URL for GoAlert 
     GOALERT_DB_URL: ""
-    # @param {string} Data encryption key for GoAlert 
     GOALERT_DATA_ENCRYPTION_KEY: ""
 
+## @section PostgreSQL parameters
+
+## @param postgresql.enabled Whether to enable the bundled PostgreSQL database
+## @param postgresql.auth.database Name of the database to create
+## @param postgresql.auth.username Username for the database
+## @param postgresql.auth.password Password for the database user
+## @param postgresql.auth.sslmode SSL mode for database connection
+## @param postgresql.service.port Port on which PostgreSQL service is exposed
+##
 postgresql:
-    # @param {boolean} Whether to enable the bundled PostgreSQL database 
     enabled: true
     auth:
-      # @param {string} Name of the database to create 
       database: goalert
-      # @param {string} Username for the database 
       username: goalert
-      # @param {string} Password for the database user 
       password: "example"
-      # @param {string} SSL mode for database connection 
       sslmode: require
     service:
-      # @param {number} Port on which PostgreSQL service is exposed 
       port: 5432
 
+## @section Service Account parameters
+
+## @param serviceAccount.create Whether to create a service account
+## @param serviceAccount.annotations Annotations to add to the service account
+## @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+##
 serviceAccount:
-  # @param {boolean} Whether to create a service account 
   create: true
-  # @param {object} Annotations to add to the service account 
   annotations: {}
-  # @param {string} The name of the service account to use. If not set and create is true, a name is generated using the fullname template 
   name: ""
 
-# @param {object} Annotations to add to the pod 
-podAnnotations: {}
 
-# @param {object} Security context for the pod 
-podSecurityContext: {}
-  # fsGroup: 2000
 
-# @param {object} Security context for the container 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+## @section Service parameters
 
+## @param service.type Type of Kubernetes service to create
+## @param service.port Port on which the service is exposed
+##
 service:
-  # @param {string} Type of Kubernetes service to create 
   type: ClusterIP
-  # @param {number} Port on which the service is exposed 
   port: 8081
 
+## @section Ingress parameters
+
+## @param ingress.enabled Whether to create an Ingress resource
+## @param ingress.className Ingress class name
+## @param ingress.annotations Annotations for the Ingress resource
+## @param ingress.hosts List of hosts for the Ingress
+## @param ingress.tls TLS configuration for the Ingress
+##
 ingress:
-  # @param {boolean} Whether to create an Ingress resource 
   enabled: false
-  # @param {string} Ingress class name 
   className: ""
-  # @param {object} Annotations for the Ingress resource 
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  # @param {object[]} List of hosts for the Ingress 
   hosts: []
     # - host: chart-example.local
     #   paths:
     #     - path: /
     #       pathType: ImplementationSpecific
-  # @param {object[]} TLS configuration for the Ingress 
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
-# @param {object} Resource requests and limits for the container 
+
+## @section Autoscaling parameters
+autoscaling:
+  ## @param autoscaling.enabled Whether to enable autoscaling
+  enabled: false
+  ## @param autoscaling.minReplicas Minimum number of replicas when autoscaling
+  minReplicas: 1
+  ## @param autoscaling.maxReplicas Maximum number of replicas when autoscaling
+  maxReplicas: 100
+  ## @param autoscaling.targetCPUUtilizationPercentage Target CPU utilization percentage for autoscaling
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+
+## @section Pod Values
+## @param nodeSelector Node selector for pod assignment
+##
+nodeSelector: {}
+
+## @param tolerations for pod assignment
+tolerations: []
+## @param affinity settings for a pod assignment
+affinity: {}
+
+
+## @param resources Resource requests and limits for the container
+##
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -114,22 +151,25 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-autoscaling:
-  # @param {boolean} Whether to enable autoscaling 
-  enabled: false
-  # @param {number} Minimum number of replicas when autoscaling 
-  minReplicas: 1
-  # @param {number} Maximum number of replicas when autoscaling 
-  maxReplicas: 100
-  # @param {number} Target CPU utilization percentage for autoscaling 
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+## @param podAnnotations Annotations to add to the pod
+##
+podAnnotations: {}
 
-# @param {object} Node selector for pod assignment 
-nodeSelector: {}
+## @param podSecurityContext Security context for the pod
+##
+podSecurityContext: {}
+  # fsGroup: 2000
 
-# @param {object[]} Tolerations for pod assignment 
-tolerations: []
+## @param securityContext Security context for the container
+##
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
-# @param {object} Affinity settings for pod assignment 
-affinity: {}
+## @param replicaCount Number of replica pods to run
+##
+replicaCount: 1
