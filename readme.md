@@ -8,6 +8,11 @@ This contains multiple charts assembled by the Tokens Studio team for hosting se
 
 [Goalert](https://github.com/target/goalert) is an open source IRM solution 
 
+### [Supabase](./charts/supabase/readme.md)
+
+[Supabase](https://supabase.com/) is an open source alternative to Firebase 
+
+
 ## Development
 
 ### Json schema generation
