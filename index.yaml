@@ -157,6 +157,19 @@ entries:
     version: 0.0.1
   supabase:
   - apiVersion: v2
+    created: "2024-10-21T23:16:16.373852331Z"
+    description: The open source Firebase alternative.
+    digest: 3ca79d418dfca461b9d569f8edd2cec67e432ab33b9dd7ab33e7c0b18e6ba627
+    icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: supabase
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.3/supabase-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     created: "2024-10-21T21:31:15.322582614Z"
     description: The open source Firebase alternative.
     digest: 45e07c6b8c4984a51d886dea16e12f0f66b09de9a374ced7d4a5b68d0a759c43
@@ -182,4 +195,4 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
     version: 0.0.1
-generated: "2024-10-21T21:31:15.322600798Z"
+generated: "2024-10-21T23:16:16.373874753Z"
