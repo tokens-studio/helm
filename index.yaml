@@ -5,6 +5,46 @@ entries:
       artifacthub.io/category: monitoring-logging
       artifacthub.io/signKey: |
         fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "true"
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: v0.32.0
+    created: "2024-10-21T14:45:57.79058306Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.x.x
+    description: Goalert is an open source IRM solution
+    digest: e7776e11867d29b28f0bf5208ef5acba99d4b3e3a0536dc094a4ff222cc8b94d
+    home: https://github.com/target/goalert
+    icon: https://raw.githubusercontent.com/target/goalert/master/web/src/app/public/icons/favicon-128.png
+    keywords:
+    - on-call
+    - scheduling
+    - escalations
+    - notifications
+    - alerting
+    - incident-response
+    - sms
+    - voice-calls
+    - automation
+    - irm
+    - incident-management
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: goalert
+    sources:
+    - https://github.com/target/goalert
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.4/goalert-0.0.4.tgz
+    version: 0.0.4
+  - annotations:
+      artifacthub.io/category: monitoring-logging
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
         url: https://keybase.io/test/pgp_keys.asc
       artifacthub.io/valuesSchema: "true"
       licenses: Apache-2.0
@@ -115,4 +155,18 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.1/goalert-0.0.1.tgz
     version: 0.0.1
-generated: "2024-09-25T17:39:05.589317492Z"
+  supabase:
+  - apiVersion: v2
+    created: "2024-10-21T14:45:57.923985984Z"
+    description: The open source Firebase alternative.
+    digest: 9cd446716aedc59ff71de134d8c48351ab8efdb578a87a346065525fad62d2bc
+    icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: supabase
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-10-21T14:45:57.923999359Z"
