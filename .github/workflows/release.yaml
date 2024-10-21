@@ -31,7 +31,7 @@ jobs:
           version: v3.4.0
       - name: Import Secrets
         id: secrets
-        uses: hashicorp/vault-action@v2
+        uses: hashicorp/vault-action@v3
         with:
           url: ${{ vars.VAULT_URL }}
           role: ${{ vars.VAULT_ROLE }}
