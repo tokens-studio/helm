@@ -1,0 +1,8 @@
+version: '3'
+services:
+  chart-testing:
+    image: quay.io/helmpack/chart-testing
+    volumes:
+      - ./:/charts
+    working_dir: /charts
+    entrypoint: ct lint --config ct.yaml
