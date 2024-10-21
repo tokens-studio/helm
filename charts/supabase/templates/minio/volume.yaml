@@ -3,6 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: {{  .Release.Namespace }}
   name: {{ include "supabase.minio.fullname" . }}-pvc
   labels:
     {{- include "supabase.labels" . | nindent 4 }}
