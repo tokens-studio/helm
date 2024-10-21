@@ -252,7 +252,7 @@ auth:
   image:
     repository: supabase/gotrue
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v2.163.0"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -511,7 +511,7 @@ meta:
   image:
     repository: supabase/postgres-meta
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v0.84.2"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
