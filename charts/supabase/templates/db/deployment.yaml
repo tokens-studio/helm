@@ -104,16 +104,6 @@ spec:
                   name: {{ include "supabase.secret.db" . }}
                   key: database
                   {{- end }}
-            - name: PGDATABASE
-              valueFrom:
-                secretKeyRef:
-                  {{- if .Values.secret.db.secretRef }}
-                  name: {{ .Values.secret.db.secretRef }}
-                  key: {{ .Values.secret.db.secretRefKey.database | default "database" }}
-                  {{- else }}
-                  name: {{ include "supabase.secret.db" . }}
-                  key: database
-                  {{- end }}
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
