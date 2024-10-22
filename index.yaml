@@ -164,6 +164,27 @@ entries:
       artifacthub.io/valuesSchema: "false"
       licenses: Apache-2.0
     apiVersion: v2
+    created: "2024-10-22T11:36:12.703714475Z"
+    description: The open source Firebase alternative.
+    digest: f98fe8c8c51de5f1d5c93512ed755a6ae80206ebb77283b8b851a8e6a6582756
+    home: https://supabase.com/
+    icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: supabase
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.6/supabase-0.0.6.tgz
+    version: 0.0.6
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/signKey: |-
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "false"
+      licenses: Apache-2.0
+    apiVersion: v2
     created: "2024-10-22T11:29:06.413805905Z"
     description: The open source Firebase alternative.
     digest: 638c3e14bd59201ae16a5a0f67ba7ff681b19f48357b73c0f6070a990e37b206
@@ -229,4 +250,4 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
     version: 0.0.1
-generated: "2024-10-22T11:29:06.413836152Z"
+generated: "2024-10-22T11:36:12.703751093Z"
