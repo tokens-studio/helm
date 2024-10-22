@@ -34,11 +34,11 @@ spec:
           image: postgres:15-alpine
           imagePullPolicy: IfNotPresent
           env:
-            - name: DB_HOST
+            - name: DB_HOSTNAME
               {{- if .Values.db.enabled }}
               value: {{ include "supabase.db.fullname" . | quote }}
               {{- else }}
-              value: {{ .Values.analytics.environment.DB_HOST | quote }}
+              value: {{ .Values.analytics.environment.DB_HOSTNAME | quote }}
               {{- end }}
             - name: DB_USER
               valueFrom:
@@ -55,7 +55,7 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              until pg_isready -h $(DB_HOST) -p $(DB_PORT) -U $(DB_USER); do
+              until pg_isready -h $(DB_HOSTNAME) -p $(DB_PORT) -U $(DB_USER); do
               echo "Waiting for database to start..."
               sleep 2
               done

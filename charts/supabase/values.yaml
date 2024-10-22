@@ -84,14 +84,14 @@ secret:
 # Optional: Postgres Database
 # A standalone Postgres database configured to work with Supabase services.
 # You can spin up any other Postgres database container if required.
-# If so, make sure to adjust DB_HOST accordingly to point to the right database service.
+# If so, make sure to adjust DB_HOSTNAME accordingly to point to the right database service.
 db:
   # Enable database provisioning
   enabled: true
   image:
     repository: supabase/postgres
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "15.6.1.133"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -177,7 +177,7 @@ studio:
   image:
     repository: supabase/studio
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "20241021-9f9b083"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -282,7 +282,7 @@ auth:
     port: 9999
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USER: supabase_auth_admin
     DB_PORT: 5432
     DB_DRIVER: postgres
@@ -353,7 +353,7 @@ rest:
   image:
     repository: postgrest/postgrest
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v12.2.3"
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: ""
@@ -382,7 +382,7 @@ rest:
     port: 3000
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USER: authenticator
     DB_PORT: 5432
     DB_DRIVER: postgres
@@ -430,7 +430,7 @@ realtime:
   image:
     repository: supabase/realtime
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v2.33.8"
   imagePullSecrets: []
   nameOverride: ""
   fullnameOverride: ""
@@ -459,7 +459,7 @@ realtime:
     port: 4000
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USER: supabase_admin
     DB_PORT: 5432
     DB_SSL: disable  # disable, allow, prefer, require, verify-ca, verify-full
@@ -541,7 +541,7 @@ meta:
     port: 8080
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USER: supabase_admin
     DB_PORT: 5432
     DB_DRIVER: postgres
@@ -586,7 +586,7 @@ storage:
   image:
     repository: supabase/storage-api
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v1.12.0"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -616,7 +616,7 @@ storage:
     port: 5000
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USER: supabase_storage_admin
     DB_PORT: 5432
     DB_DRIVER: postgres
@@ -681,7 +681,7 @@ imgproxy:
   image:
     repository: darthsim/imgproxy
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v3.26"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -761,7 +761,7 @@ kong:
   image:
     repository: kong
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "3.8.0"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -856,7 +856,7 @@ analytics:
   image:
     repository: supabase/logflare
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "1.8.12"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -887,7 +887,7 @@ analytics:
   environment:
     LOGFLARE_NODE_HOST: 127.0.0.1
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USERNAME: supabase_admin
     DB_PORT: 5432
     DB_DRIVER: postgresql
@@ -940,7 +940,7 @@ vector:
   image:
     repository: timberio/vector
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "0.42.0-alpine"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -1007,7 +1007,7 @@ functions:
   image:
     repository: supabase/edge-runtime
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "v1.59.0"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -1037,7 +1037,7 @@ functions:
     port: 9000
   environment:
     # Override the database hostname if using external database
-    # DB_HOST: DATABASE.NAMESPACE.svc.cluster.local
+    # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
     DB_USERNAME: supabase_functions_admin
     DB_PORT: 5432
     DB_DRIVER: postgresql
@@ -1081,7 +1081,7 @@ minio:
   image:
     repository: minio/minio
     pullPolicy: IfNotPresent
-    tag: "latest"
+    tag: "RELEASE.2024-10-02T17-50-41Z"
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
