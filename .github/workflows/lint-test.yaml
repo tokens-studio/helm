@@ -17,6 +17,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.7
+      
+      - name: Install helm-unittest plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest
 
       - name: Install chart-testing
         uses: helm/chart-testing-action@v2.6.1
@@ -31,6 +34,19 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: ct lint
+
+      - name: Get changed charts
+        id: changed-charts
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            base_ref=${{ github.base_ref }}
+          else
+            base_ref=$(git rev-parse HEAD^)
+          fi
+          
+          changed_charts=$(git diff --find-renames --name-only $base_ref -- charts | grep Chart.yaml | xargs -L1 dirname | sort -u)
+          echo "Changed charts: $changed_charts"
+          echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.10.0

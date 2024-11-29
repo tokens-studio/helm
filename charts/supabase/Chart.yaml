@@ -17,7 +17,7 @@ maintainers:
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.0.6
+version: 0.0.7
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
@@ -29,9 +29,9 @@ version: 0.0.6
 # A URL to an SVG or PNG image to be used as an icon
 icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
 annotations:
-     artifacthub.io/valuesSchema: "false"
-     licenses: Apache-2.0
-     artifacthub.io/category: integration-delivery
-     artifacthub.io/signKey: |
+  artifacthub.io/valuesSchema: "false"
+  licenses: Apache-2.0
+  artifacthub.io/category: integration-delivery
+  artifacthub.io/signKey: |
       fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
       url: https://keybase.io/tokensstudio/pgp_keys.asc
