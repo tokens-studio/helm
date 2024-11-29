@@ -29,28 +29,36 @@ jobs:
         run: |
           changed=$(ct list-changed)
           if [[ -n "$changed" ]]; then
-            echo "::set-output name=changed::true"
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Changed charts: $changed"
+            echo "changed_charts=$changed" >> $GITHUB_OUTPUT
           fi
+
+      - name: Add repositories
+        run: |
+          for dir in $(ls -d charts/*/); do
+            helm dependency list $dir 2> /dev/null | tail +2 | head -n -1 | awk '{ print "helm repo add " $1 " " $3 }' | while read cmd; do $cmd; done
+          done
 
       - name: Run chart-testing (lint)
         run: ct lint
 
-      - name: Get changed charts
-        id: changed-charts
+      - name: Run helm-unittest on changed charts
+        if: steps.list-changed.outputs.changed == 'true'
         run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            base_ref=${{ github.base_ref }}
-          else
-            base_ref=$(git rev-parse HEAD^)
-          fi
-          
-          changed_charts=$(git diff --find-renames --name-only $base_ref -- charts | grep Chart.yaml | xargs -L1 dirname | sort -u)
-          echo "Changed charts: $changed_charts"
-          echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
+          IFS=' ' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
+          for chart in "${CHART_ARRAY[@]}"; do
+            echo "Testing chart: $chart"
+            cd "charts/$chart"
+            helm unittest . || exit 1
+            cd $GITHUB_WORKSPACE
+          done
+
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.10.0
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
+        if: steps.list-changed.outputs.changed == 'true'
         run: ct install
