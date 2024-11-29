@@ -49,7 +49,7 @@ jobs:
           IFS=' ' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
           for chart in "${CHART_ARRAY[@]}"; do
             echo "Testing chart: $chart"
-            cd "charts/$chart"
+            cd "$chart"
             helm unittest . || exit 1
             cd $GITHUB_WORKSPACE
           done
