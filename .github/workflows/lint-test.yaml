@@ -41,7 +41,7 @@ jobs:
           done
 
       - name: Run chart-testing (lint)
-        run: ct lint
+        run: ct lint --config ct.yaml
 
       - name: Run helm-unittest on changed charts
         if: steps.list-changed.outputs.changed == 'true'
@@ -49,7 +49,7 @@ jobs:
           IFS=' ' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
           for chart in "${CHART_ARRAY[@]}"; do
             echo "Testing chart: $chart"
-            cd "charts/$chart"
+            cd "$chart"
             helm unittest . || exit 1
             cd $GITHUB_WORKSPACE
           done
@@ -61,4 +61,4 @@ jobs:
 
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
-        run: ct install
+        run: ct install --config ct.yaml

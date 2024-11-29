@@ -2,16 +2,16 @@ suite: test auth deployment
 templates:
   - auth/deployment.yaml
 tests:
-  - it: should set numeric values correctly 
+  - it: should allow arbitrary envFrom
     set:
-      # Note. Do not use raw numbers as it will likely convert it to scientific notation if the numbber gets too large
-      auth: 
-        environment:
-          GOTRUE_JWT_EXP: '18748800'
+      auth:
+        envFrom:
+          - secretRef: 
+              name: env-secret
 
     asserts:
-    - contains:
-        path: spec.template.spec.containers[0].env
-        content:
-          name: GOTRUE_JWT_EXP
-          value: '18748800'
+      - contains:
+          path: spec.template.spec.containers[0].envFrom
+          content:
+            secretRef:
+              name: env-secret
