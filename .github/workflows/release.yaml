@@ -61,6 +61,8 @@ jobs:
           done
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
+        with:
+            skip_existing: true
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           CR_KEY: ${{ steps.secrets.outputs.CR_KEY }}  #Key name used while creating key
