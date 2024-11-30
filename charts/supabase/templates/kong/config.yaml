@@ -96,6 +96,27 @@ data:
               allow:
                 - admin
                 - anon
+      {{- if eq .Values.auth.environment.GOTRUE_SAML_ENABLED "true" }}
+      - name: auth-v1-open-sso-acs
+        url: "http://{{ include "supabase.auth.fullname" . }}:{{ .Values.auth.service.port }}/sso/saml/acs"
+        routes:
+          - name: auth-v1-open-sso-acs
+            strip_path: true
+            paths:
+             - /auth/v1/sso/saml/acs
+             - /sso/saml/acs
+        plugins:
+          - name: cors
+      - name: auth-v1-open-sso-metadata
+        url: "http://{{ include "supabase.auth.fullname" . }}:{{ .Values.auth.service.port }}/sso/saml/metadata"
+        routes:
+          - name: auth-v1-open-sso-metadata
+            strip_path: true
+            paths:
+            - /auth/v1/sso/saml/metadata
+        plugins:
+              - name: cors
+       {{- end }}
     {{- end }}
     {{- if .Values.rest.enabled }}
       - name: rest-v1

@@ -280,6 +280,7 @@ auth:
   service:
     type: ClusterIP
     port: 9999
+  # Used to expose
   environment:
     # Override the database hostname if using external database
     # DB_HOSTNAME: DATABASE.NAMESPACE.svc.cluster.local
@@ -295,6 +296,8 @@ auth:
     GOTRUE_DISABLE_SIGNUP: "false"
     GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
     GOTRUE_JWT_ADMIN_ROLES: service_role
+    GOTRUE_SAML_ENABLED: "false"
+    # GOTRUE_SAML_PRIVATE_KEY: <YOUR_KEY_IN_BASE64>
     GOTRUE_JWT_AUD: authenticated
     GOTRUE_JWT_EXP: "3600"
     GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
