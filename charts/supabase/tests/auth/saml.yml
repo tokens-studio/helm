@@ -1,0 +1,37 @@
+suite: test kong configmap
+templates:
+  - kong/config.yaml
+tests:
+  - it: should include SAML routes when GOTRUE_SAML_ENABLED is true
+    set:
+      kong.enabled: true
+      auth.enabled: true
+      auth.environment.GOTRUE_SAML_ENABLED: "true"
+    asserts:
+      - matchRegex:
+          path: data["template.yml"]
+          pattern: "name: auth-v1-open-sso-acs"
+      - matchRegex:
+          path: data["template.yml"]
+          pattern: "url: \"http://.*:.*\\/sso\\/saml\\/acs\""
+      - matchRegex:
+          path: data["template.yml"]
+          pattern: "name: auth-v1-open-sso-metadata"
+      - matchRegex:
+          path: data["template.yml"]
+          pattern: "url: \"http://.*:.*\\/sso\\/saml\\/metadata\""
+
+
+
+  - it: should not include SAML routes when GOTRUE_SAML_ENABLED is false
+    set:
+      kong.enabled: true
+      auth.enabled: true
+      auth.environment.GOTRUE_SAML_ENABLED: "false"
+    asserts:
+      - notMatchRegex:
+          path: data["template.yml"]
+          pattern: "name: auth-v1-open-sso-acs"
+      - notMatchRegex:
+          path: data["template.yml"]
+          pattern: "name: auth-v1-open-sso-metadata"
