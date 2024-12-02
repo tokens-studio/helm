@@ -13,51 +13,81 @@
 # |-- 12. Functions
 # |-- 13. Minio
 
+
+## @section Secrets management
 secret:
-  # jwt will be used to reference secret in multiple services:
-  # Anon & Service key: Studio, Storage, Kong
-  # JWT Secret: Analytics, Auth, Rest, Realtime, Storage
   jwt:
+    ## @param secret.jwt.anonKey Anonymous key for JWT
+    ## @description Will be used to reference secret in multiple services: Studio, Storage, Kong
     anonKey: ""
+
+    ## @param secret.jwt.serviceKey Service key for JWT
+    ## @description Will be used to reference secret in multiple services: Studio, Storage, Kong
     serviceKey: ""
+
+    ## @param secret.jwt.secret JWT secret
+    ## @description Will be used in: Analytics, Auth, Rest, Realtime, Storage
     secret: ""
-    # specify existing secret, which takes precedence over variables above
+
+    ## @param secret.jwt.secretRef Reference to an existing secret
+    ## @description If specified, takes precedence over the above variables
     secretRef: ""
-    # override secret keys for existing secret refs
+
+    ##  Override secret keys for existing secret references
     secretRefKey:
+      ## @param secret.jwt.secretRefKey.anonKey Key for anonymous key in the referenced secret
       anonKey: anonKey
+
+      ## @param secret.jwt.secretRefKey.serviceKey Key for service key in the referenced secret
       serviceKey: serviceKey
+
+      ## @param secret.jwt.secretRefKey.secret Key for JWT secret in the referenced secret
       secret: secret
+
   # database credentials
   # these fields must be provided even if using external database
   db:
+    ## @param secret.db.username
     username: ""
+    ## @param secret.db.password
     password: ""
+    ## @param secret.db.database
     database: ""
-    # specify existing secret, which takes precedence over variables above
+    ## @param secret.db.secretRef specify existing secret, which takes precedence over variables above
     secretRef: ""
     # override secret keys for existing secret refs
     secretRefKey:
+      ## @param secret.db.secretRefKey.username
       username: username
+      ## @param secret.db.secretRefKey.password
       password: password
+      ## @param secret.db.secretRefKey.database
       database: database
   # analytics Logflare API key
   analytics:
+    ## @param secret.analytics.apiKey
     apiKey: ""
-    # specify existing secret, which takes precedence over variable above
+    ## @param secret.analytics.secretRef specify existing secret, which takes precedence over variable above
     secretRef: ""
-    # override secret keys for existing secret refs
+     ## @param secret.analytics.secretRefKey.apikey override secret keys for existing secret refs
     secretRefKey:
       apiKey: apiKey
   # smtp will be used to reference secret including smtp credentials
   smtp:
+
+    ## @param secret.smtp.username  [optional]
+    ## @param secret.smtp.password  [optional]
+    ## @param secret.smtp.secretRef  [optional]
+    ## @optional
     # username: ""
     # password: ""
     # specify existing secret, which takes precedence over variables above
     # secretRef: ""
     # override secret keys for existing secret refs
     secretRefKey:
+      ## @param secret.smtp.secretRefKey.username
       username: username
+      ## @param secret.smtp.secretRefKey.password
       password: password
   # secret used to access the studio dashboard
   # leave it empty to disable dashboard authentication
@@ -78,7 +108,9 @@ secret:
     # secretRef: ""
     # override secret keys for existing secret refs
     secretRefKey:
+      ## @param secret.s3.secretRefKey.keyId
       keyId: keyId
+      ## @param secret.s3.secretRefKey.accessKey
       accessKey: accessKey
 
 # Optional: Postgres Database
@@ -87,28 +119,40 @@ secret:
 # If so, make sure to adjust DB_HOSTNAME accordingly to point to the right database service.
 db:
   # Enable database provisioning
+  ## @param db.enabled
   enabled: true
   image:
+    ## @param db.image.repository
     repository: supabase/postgres
+    ## @param db.image.pullPolicy
     pullPolicy: IfNotPresent
+    ## @param db.image.repository
     tag: "15.6.1.133"
+  ## @param db.imagePullSecrets
   imagePullSecrets: []
+  ## @param db.replicaCount
   replicaCount: 1
+  ## @param db.nameOverride
   nameOverride: ""
+  ## @param db.fullnameOverride
   fullnameOverride: ""
+  ## @param db.livenessProbe
   livenessProbe: {}
+  ## @param db.readinessProbe
   readinessProbe: {}
   serviceAccount:
-    # Specifies whether a service account should be created
+    ## @param db.serviceAccount.create Specifies whether a service account should be created
     create: true
-    # Annotations to add to the service account
+    ## @param db.serviceAccount.annotations Annotations to add to the service account
     annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
+    ## @param db.serviceAccount.annotations The name of the service account to use. If not set and create is true, a name is generated using the fullname template
     name: ""
+  ## @param db.podAnnotations
   podAnnotations: {}
+  ## @param db.podSecurityContext
   podSecurityContext: {}
     # fsGroup: 2000
+  ## @param db.securityContext
   securityContext: {}
     # capabilities:
     #   drop:
@@ -765,6 +809,15 @@ kong:
     repository: kong
     pullPolicy: IfNotPresent
     tag: "3.8.0"
+  config:
+    # Additional commands to run as part of the kong start. Can be used to install additional plugins
+    additionalCommands: []
+    dashboard: |
+      plugins:
+        - name: cors
+        - name: basic-auth
+          config:
+            hide_credentials: true
   imagePullSecrets: []
   replicaCount: 1
   nameOverride: ""
@@ -801,6 +854,9 @@ kong:
     KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
     KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
     KONG_LOG_LEVEL: warn
+  envFrom: []
+    # - secretRef:
+    #     name: env-secret
   ingress:
     enabled: true
     className: "nginx"

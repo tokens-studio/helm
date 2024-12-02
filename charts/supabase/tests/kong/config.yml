@@ -1,0 +1,19 @@
+suite: test auth deployment
+templates:
+  - kong/config.yaml
+tests:
+  - it: allow injecting additional startup commands
+    set:
+      kong:
+        config:
+          additionalCommands:
+            - "foo"
+            - "bar"
+
+    asserts:
+      - matchRegex:
+          path: data["wrapper.sh"]
+          pattern: |
+            echo "Running additional startup commands..."
+            foo
+            bar

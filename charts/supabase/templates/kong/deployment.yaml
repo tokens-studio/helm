@@ -84,6 +84,10 @@ spec:
                   key: password
                   {{- end }}
             {{- end }}
+          {{- with .Values.kong.envFrom }}
+          envFrom:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.kong.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}

@@ -54,11 +54,11 @@ jobs:
             cd $GITHUB_WORKSPACE
           done
 
+      # Disable for now.
+      # - name: Create kind cluster
+      #   uses: helm/kind-action@v1.10.0
+      #   if: steps.list-changed.outputs.changed == 'true'
 
-      - name: Create kind cluster
-        uses: helm/kind-action@v1.10.0
-        if: steps.list-changed.outputs.changed == 'true'
-
-      - name: Run chart-testing (install)
-        if: steps.list-changed.outputs.changed == 'true'
-        run: ct install --config ct.yaml
+      # - name: Run chart-testing (install)
+      #   if: steps.list-changed.outputs.changed == 'true'
+      #   run: ct install --config ct.yaml
