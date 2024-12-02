@@ -22,6 +22,13 @@ data:
     /usr/local/kong/template.yml \
     > /usr/local/kong/kong.yml
 
+    {{- if .Values.kong.config.additionalCommands }}
+    echo "Running additional startup commands..."
+    {{- range .Values.kong.config.additionalCommands }}
+    {{ . }}
+    {{- end }}
+    {{- end }}
+
     exec /docker-entrypoint.sh kong docker-start
   template.yml: |
     _format_version: '2.1'
@@ -246,10 +253,6 @@ data:
             paths:
               - /
     {{- if .Values.secret.dashboard }}
-        plugins:
-          - name: cors
-          - name: basic-auth
-            config:
-              hide_credentials: true
+        {{ .Values.kong.config.dashboard | nindent 8 }}
     {{- end }}
 {{- end }}
