@@ -30,5 +30,5 @@ dependencies:
 maintainers:
   - name: Paralus Team
   - name: Andrew At Hyma
-version: "0.3.0"
+version: "0.3.1"
 appVersion: "v0.2.8"
