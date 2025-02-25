@@ -198,6 +198,44 @@ entries:
   paralus:
   - apiVersion: v2
     appVersion: v0.2.8
+    created: "2025-02-25T11:58:07.848982087Z"
+    dependencies:
+    - condition: deploy.kratos.enable
+      name: kratos
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.29.0
+    - condition: deploy.elasticsearch.enable
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.postgresql.enable
+      name: postgresql
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 11.1.9
+    - condition: deploy.filebeat.enable
+      name: filebeat
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.fluentbit.enable
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.20.8
+    - condition: deploy.contour.enable
+      name: contour
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 7.8.0
+    description: A Helm chart for Paralus ZTKA.
+    digest: 23a6573f7134c614099d67673551687b0f625d78afb862020f29a4a9e3495de1
+    maintainers:
+    - name: Paralus Team
+    - name: Andrew At Hyma
+    name: paralus
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/paralus-0.3.4/paralus-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
+    appVersion: v0.2.8
     created: "2025-02-25T11:11:46.149658054Z"
     dependencies:
     - condition: deploy.kratos.enable
@@ -490,4 +528,4 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
     version: 0.0.1
-generated: "2025-02-25T11:11:46.149686948Z"
+generated: "2025-02-25T11:58:07.84901078Z"
