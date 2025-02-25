@@ -1,5 +1,5 @@
 apiVersion: v2
-name: ztka
+name: paralus
 description: A Helm chart for Paralus ZTKA.
 type: application
 dependencies:
