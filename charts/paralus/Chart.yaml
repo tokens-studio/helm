@@ -1,0 +1,34 @@
+apiVersion: v2
+name: ztka
+description: A Helm chart for Paralus ZTKA.
+type: application
+dependencies:
+  - name: kratos
+    version: 0.29.0
+    repository: https://k8s.ory.sh/helm/charts
+    condition: deploy.kratos.enable
+  - name: elasticsearch
+    version: 7.17.1
+    repository: https://helm.elastic.co
+    condition: deploy.elasticsearch.enable
+  - name: postgresql
+    version: 11.1.9
+    repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+    condition: deploy.postgresql.enable
+  - name: filebeat
+    version: 7.17.1
+    repository: https://helm.elastic.co
+    condition: deploy.filebeat.enable
+  - name: fluent-bit
+    version: 0.20.8
+    repository: https://fluent.github.io/helm-charts
+    condition: deploy.fluentbit.enable
+  - name: contour
+    version: 7.8.0
+    repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+    condition: deploy.contour.enable
+maintainers:
+  - name: Paralus Team
+  - name: Andrew At Hyma
+version: "0.3.0"
+appVersion: "v0.2.8"

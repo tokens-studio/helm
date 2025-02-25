@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paralus
+  labels:
+    {{- include "ztka.labels" . | nindent 4 }}
+    {{- include "ztka.selectorLabels" (dict "image" $.Values.images.paralus "release" $.Release) | nindent 4 }}
+    app.kubernetes.io/component: workload
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ztka.selectorLabels" (dict "image" $.Values.images.paralus "release" $.Release) | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-paralus.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "ztka.labels" . | nindent 8 }}
+        {{- include "ztka.selectorLabels" (dict "image" $.Values.images.paralus "release" $.Release) | nindent 8 }}
+        app.kubernetes.io/component: workload
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ztka.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: audit-logs
+          emptyDir: {}
+      initContainers:
+        {{- if .Values.deploy.kratos.enable }}
+        - name: kratos-automigrate
+          image: "{{ .Values.images.paralusInit.repository }}:{{ .Values.images.paralusInit.tag | default .Chart.AppVersion }}"
+          command: ["kratos"]
+          args: ["migrate", "sql", "-e", "--yes"]
+          env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  {{- if and .Values.deploy.postgresql.existingSecret.name .Values.deploy.postgresql.existingSecret.keys.dsn }}
+                  name: {{ .Values.deploy.postgresql.existingSecret.name }}
+                  key: {{ .Values.deploy.postgresql.existingSecret.keys.dsn }}
+                  {{- else }}
+                  name: paralus-db
+                  key: DSN
+                  {{- end }}
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+        {{- end }}
+        {{- if .Values.paralus.automigrate }}
+        - name: migrate-admindb
+          image: "{{ .Values.images.paralusInit.repository }}:{{ .Values.images.paralusInit.tag | default .Chart.AppVersion }}"
+          command: ["migrate"]
+          args: ["-path=/data/migrations/admindb", "-database", "$(DSN)", "up"]
+          env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  {{- if and .Values.deploy.postgresql.existingSecret.name .Values.deploy.postgresql.existingSecret.keys.dsn }}
+                  name: {{ .Values.deploy.postgresql.existingSecret.name }}
+                  key: {{ .Values.deploy.postgresql.existingSecret.keys.dsn }}
+                  {{- else }}
+                  name: paralus-db
+                  key: DSN
+                  {{- end }}
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+        {{- end }}
+        - name: initialize
+          image: "{{ .Values.images.paralusInit.repository }}:{{ .Values.images.paralusInit.tag | default .Chart.AppVersion }}"
+          command: ["paralus-init"]
+          args: [
+            "-partner", {{.Values.paralus.initialize.partner|quote}},
+            "-partner-desc", {{.Values.paralus.initialize.partnerDesc|quote}},
+            "-partner-host", {{.Values.paralus.initialize.partnerHost|quote}},
+            "-org", {{.Values.paralus.initialize.org|quote}},
+            "-org-desc", {{.Values.paralus.initialize.orgDesc|quote}},
+            "-admin-email", {{.Values.paralus.initialize.adminEmail|quote}},
+            "-admin-first-name", {{.Values.paralus.initialize.adminFirstName|quote}},
+            "-admin-last-name", {{.Values.paralus.initialize.adminLastName|quote}},
+             ]
+          {{- if and .Values.deploy.postgresql.existingSecret.name .Values.deploy.postgresql.existingSecret.keys }}
+          env:
+            {{- include "ztka.externalSecretsEnv" . | nindent 14 }}
+          {{- end }}
+          envFrom:
+          - configMapRef:
+              name: paralus-config
+          {{- if not .Values.deploy.postgresql.existingSecret.name }}
+          - secretRef:
+              name: paralus-db
+          {{- end }}
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+      containers:
+        - name: paralus-tail
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "busybox:latest"
+          command: ['sh', '-c' ,'tail -F /audit-logs/audit.log 2>/tmp/tail-err']
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /audit-logs
+        - name: paralus
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.paralus.repository }}:{{ .Values.images.paralus.tag | default .Chart.AppVersion }}"
+          command: ["./paralus"]
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /audit-logs
+          envFrom:
+          - configMapRef:
+              name: paralus-config
+          {{- if not .Values.deploy.postgresql.existingSecret.name }}
+          - secretRef:
+              name: paralus-db
+          {{- end }}
+          {{- if and .Values.deploy.postgresql.existingSecret.name .Values.deploy.postgresql.existingSecret.keys }}
+          env:
+            {{- include "ztka.externalSecretsEnv" . | nindent 14 }}
+          {{- end }}
+          ports:
+            {{- range .Values.services.paralus.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

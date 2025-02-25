@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  labels:
+    {{- include "ztka.labels" . | nindent 4 }}
+    {{- include "ztka.selectorLabels" (dict "image" $.Values.images.dashboard "release" $.Release) | nindent 4 }}
+    app.kubernetes.io/component: workload
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ztka.selectorLabels" (dict "image" $.Values.images.dashboard "release" $.Release) | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ztka.labels" . | nindent 8 }}
+        {{- include "ztka.selectorLabels" (dict "image" $.Values.images.dashboard "release" $.Release) | nindent 8 }}
+        app.kubernetes.io/component: workload
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ztka.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: dashboard
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.dashboard.repository }}:{{ .Values.images.dashboard.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          ports:
+            {{- range .Values.services.dashboard.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

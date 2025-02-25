@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prompt
+  labels:
+    {{- include "ztka.labels" . | nindent 4 }}
+    {{- include "ztka.selectorLabels" (dict "image" $.Values.images.prompt "release" $.Release) | nindent 4 }}
+    app.kubernetes.io/component: workload
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ztka.selectorLabels" (dict "image" $.Values.images.prompt "release" $.Release) | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ztka.labels" . | nindent 8 }}
+        {{- include "ztka.selectorLabels" (dict "image" $.Values.images.prompt "release" $.Release) | nindent 8 }}
+        app.kubernetes.io/component: workload
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ztka.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: kubectl
+          emptyDir: {}
+        - name: audit-logs
+          emptyDir: {}
+      initContainers:
+        - name: install-kubectl
+          image: busybox:latest
+          volumeMounts:
+            - name: kubectl
+              mountPath: /data
+          command: ['sh', '-c', 'wget -q "https://dl.k8s.io/release/$(wget -qO- https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -O /data/kubectl && chmod +x /data/kubectl']
+      containers:
+        - name: prompt-tail
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "busybox:latest"
+          command: ['sh', '-c' ,'tail -F /audit-logs/audit.log 2>/tmp/tail-err']
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          volumeMounts:
+            - name: audit-logs
+              mountPath: /audit-logs
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.images.prompt.repository }}:{{ .Values.images.prompt.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.images.pullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: prompt-config
+          {{- if not .Values.deploy.postgresql.existingSecret.name }}
+          - secretRef:
+              name: paralus-db
+          {{- end }}
+          {{- if and .Values.deploy.postgresql.existingSecret.name .Values.deploy.postgresql.existingSecret.keys }}
+          env:
+            {{- include "ztka.externalSecretsEnv" . | nindent 14 }}
+          {{- end }}
+          ports:
+            {{- range .Values.services.prompt.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .containerPort }}
+            {{- end }}
+          volumeMounts:
+            - name: kubectl
+              subPath: kubectl
+              mountPath: /usr/local/bin/kubectl
+            - name: audit-logs
+              mountPath: /audit-logs
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

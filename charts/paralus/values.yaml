@@ -1,0 +1,625 @@
+# Default values for Paralus ZTKA.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of replicas in deployment
+replicaCount: 1
+
+# List of images to be deployed along with its tag. Specifying image
+# tag overrides deault value which is chart appVersion.
+images:
+  paralus:
+    name: paralus
+    # -- Paralus paralus image
+    repository: paralusio/paralus
+    tag: "v0.2.8"
+  paralusInit:
+    name: paralus-init
+    # -- Paralus paralus initialize image
+    repository: paralusio/paralus-init
+    tag: "v0.2.8"
+  relay:
+    name: relay
+    # -- relay image
+    repository: paralusio/relay
+    tag: "v0.1.8"
+  prompt:
+    name: prompt
+    # -- prompt image
+    repository: paralusio/prompt
+    tag: "v0.1.3"
+  dashboard:
+    name: dashboard
+    # -- Paralus dashboard image
+    repository: paralusio/dashboard
+    tag: "v0.2.3"
+
+  # -- If defined, a imagePullPolicy applied to all deployments
+  pullPolicy: IfNotPresent
+
+# -- If defined, uses a Secret to pull an image from a private Docker
+# registry or repository
+imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is auto generated.
+  name: ""
+
+# -- Annotations for the all deployed pods
+podAnnotations: {}
+
+# -- Additional labels to add to all resources
+additionalLabels: {}
+
+# Pod Security Context
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# Security Context
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# List of services and their port numbers. When "port" is not
+# specificed in "services.<name>.ports" list then service exposes on
+# containerPort instead.
+services:
+  # -- paralus service config
+  paralus:
+    name: paralus
+    type: ClusterIP
+    ports:
+      - name: http
+        containerPort: 11000
+      - name: rpc
+        containerPort: 10000
+      - name: relay-peering
+        containerPort: 10001
+  # -- prompt service config
+  prompt:
+    type: ClusterIP
+    name: prompt
+    ports:
+      - name: http
+        containerPort: 7009
+  # -- relay service config
+  relay:
+    type: ClusterIP
+    name: relay
+    ports:
+      - name: https
+        containerPort: 443
+  # -- dashboard service config
+  dashboard:
+    type: ClusterIP
+    name: dashboard
+    ports:
+      - name: nginx
+        containerPort: 80
+
+ingress:
+  # - install ingress resources.
+  enabled: false
+  className: ""
+  # - Annotation for ingress resources. The ssl-passthrough annotation
+  # - is mandatory for ZTKA ingress.
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  # -- Ingress TLS for console
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.com
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Autoscale paralus deployment resource
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+fqdn:
+  # -- Root domain
+  domain: paralus.local
+  # -- subdomain used for viewing dashboard
+  hostname: "console"
+  # -- a wildcard subdomain used for controller cluster to target
+  # -- cluster communication
+  coreConnectorSubdomain: "*.core-connector"
+  # -- a wildcard subdomain used for controller cluster to end user
+  # -- communication
+  userSubdomain: "*.user"
+
+paralus:
+  # -- Enable paralus migrations
+  automigrate: true
+  initialize:
+    # -- Partner name
+    partner: "Paralus"
+    # -- Partner description
+    partnerDesc: "Default Partner"
+    # -- Partner host
+    partnerHost: "paralus.local"
+    # -- Organization name
+    org: "ParalusOrg"
+    # -- Organization description
+    orgDesc: "Default Organization"
+    # -- Admin email address
+    adminEmail: "admin@paralus.local"
+    # -- Admin first name
+    adminFirstName: "Admin"
+    # -- Admin last name
+    adminLastName: "User"
+
+# @ignored
+analytics:
+  enable: true
+  gaTrackingID: "UA-230674306-1"
+
+hooks:
+  enable: true
+
+auditLogs:
+  # -- database or elasticsearch for storing audit logs
+  # -- database(postgres) by default
+  storage: "database"  
+
+deploy:
+  kratos:
+    # -- Kratos instance is auto deployed and managed by Helm release
+    # when true.
+    enable: true
+    # -- SMTP connection URI that used by auto-deployed kratos for
+    # sending mails for example, account recovery etc.
+    smtpConnectionURI: "smtps://test:test@mypost:1025/?skip_ssl_verify=true"
+    # -- Kratos public address. Required when `deploy.kratos.enable`
+    # is unset
+    publicAddr: ""
+    # -- Kratos admin address. Required when `deploy.kratos.enable` is
+    # unset
+    adminAddr: ""
+
+  elasticsearch:
+    # -- Elasticsearch instance is auto deployed and managed by Helm
+    # release when true.
+    enable: false
+    # -- Elasticsearch address. Required when `deploy.elasticsearch.enable`
+    # is unset.
+    address: ""
+
+  postgresql:
+    # -- Postgresql db is auto deployed and managed by Helm release
+    # when true. (It is recommended to manage your own DB instance
+    # separately or use DB services like Amazon RDS in production)
+    enable: false
+    # -- Postgresql DSN for example, "postgres://user:password@host:5432/db". Required
+    # when `deploy.postgresql.enable` is unset and individual components are not specified.
+    # Overrides individual components (address, username, password, database)
+    dsn: ""
+    # -- Postgresql address for example, "localhost:5432". Required
+    # when `deploy.postgresql.enable` is unset and dsn is not specified.
+    address: ""
+    # -- Postgresql username. Required when `deploy.postgresql.enable`
+    # is unset and dsn is not specified.
+    username: ""
+    # -- Postgresql password. Required when `deploy.postgresql.enable`  
+    # is unset and dsn is not specified.
+    password: ""
+    # -- Postgresql database name. Required when
+    # `deploy.postgresql.enable` is unset and dsn is not specified.
+    database: ""
+    # -- Configuration for using an existing Kubernetes secret for database credentials
+    existingSecret:
+      # -- Name of the existing Kubernetes secret containing database credentials
+      name: ""
+      # -- Mapping of database credential keys in the existing secret
+      keys:
+        # -- Key in the secret containing the database DSN
+        dsn: ""
+        # -- Key in the secret containing the database address
+        address: ""
+        # -- Key in the secret containing the database username
+        username: ""
+        # -- Key in the secret containing the database password
+        password: ""
+        # -- Key in the secret containing the database name
+        database: ""
+
+  filebeat:
+    # -- Filebeat is used to collect audit logs into the system via
+    # elasticsearch. You can disable this if you don't want audit logs
+    # or you want to store audit logs into database.
+    enable: false
+    # -- You can use this to config the index prefixes for
+    # elasticsearch.  This has to match with your filebeat config in
+    # `filebeat.daemonset.filebeatConfig.filebeat.yml`
+    indexPrefix: "ralog"
+    # TODO: can we somehow template it in filebeat.yml?
+
+  fluentbit:
+    # -- Fluentbit is used to collect audit logs into the system via a
+    # database. You can disable this if you don't want audit logs or
+    # you want to push audit logs to elasticsearch.
+    enable: true
+
+  contour:
+    # -- auto install contour ingress controller
+    enable: true
+
+    # -- TLS properties of the virtual host
+    tls: {}
+    # secretName: chart-example-tls
+
+# -- the chart will overwrite some values of kratos subchart.
+# @default -- kratos subchart overwrite
+kratos:
+  secret:
+    enabled: false
+    nameOverride: "kratos"
+  kratos:
+    development: false
+    config:
+      version: v0.11.0
+      courier:
+        smtp:
+          # As per Kratos configuration it should string, but Kratos
+          # helm chart is using it only as a flag to set
+          # COURIER_SMTP_CONNECTION_URI variable. Actual value is
+          # taken from kratos Secret.
+          connection_uri: true
+      serve:
+        public:
+          cors:
+            enabled: true
+            allowed_headers:
+              - Authorization
+              - Cookie
+              - Content-Type
+              - X-Session-Token
+            exposed_headers:
+              - Content-Type
+              - Set-Cookie
+        admin:
+          port: 4434
+      selfservice:
+        methods:
+          password:
+            enabled: true
+          oidc:
+            enabled: true
+          link:
+            enabled: true
+        flows:
+          settings:
+            privileged_session_max_age: 15m
+          recovery:
+            enabled: true
+          registration:
+            lifespan: 10m
+            after:
+              password:
+                hooks:
+                  - hook: session
+              oidc:
+                hooks:
+                  - hook: session
+      identity:
+        default_schema_id: default
+        schemas:
+          - id: default
+            url: file:///etc/config/identity.schema.v1.json
+
+    identitySchemas:
+      "identity.schema.v1.json": |
+        {
+          "$id": "https://schemas.paralus.io/email-password/identity.schema.v1.json",
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "title": "Person",
+          "type": "object",
+          "properties": {
+            "traits": {
+              "type": "object",
+              "properties": {
+                "first_name": {
+                  "title": "First name",
+                  "type": "string",
+                  "pattern": "^.*$"
+                },
+                "last_name": {
+                  "title": "Last name",
+                  "type": "string",
+                  "pattern": "^.*$"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "title": "E-Mail",
+                  "minLength": 3,
+                  "ory.sh/kratos": {
+                    "credentials": {
+                      "password": {
+                        "identifier": true
+                      }
+                    },
+                    "verification": {
+                      "via": "email"
+                    },
+                    "recovery": {
+                      "via": "email"
+                    }
+                  }
+                },
+                "idp_groups": {
+                  "type": "array",
+                  "title": "IDP groups",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "email"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+
+  deployment:
+    extraEnv:
+      - name: SERVE_PUBLIC_BASE_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: serve_public_base_url
+      - name: SELFSERVICE_DEFAULT_BROWSER_RETURN_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: default_browser_return_url
+      - name: SELFSERVICE_ALLOWED_RETURN_URLS
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: default_browser_return_url
+      - name: SELFSERVICE_FLOWS_SETTINGS_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: selfservice_flows_settings_ui_url
+      - name: SELFSERVICE_FLOWS_RECOVERY_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: selfservice_flows_recovery_ui_url
+      - name: SELFSERVICE_FLOWS_REGISTRATION_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: selfservice_flows_registration_ui_url
+      - name: SELFSERVICE_FLOWS_ERROR_UI_URL
+        valueFrom:
+          configMapKeyRef:
+            name: kratos-config
+            key: selfservice_flows_error_ui_url
+      
+    # OIDC Provider config synchronizer as sidecar to Kratos
+    extraContainers: |
+        - name: synchronizer
+          image: "paralusio/kratos-synchronizer:v0.2.8"
+          volumeMounts:
+            - name: other-configs
+              mountPath: /etc/kratos
+          env:
+            - name: DSN
+              valueFrom:
+                secretKeyRef:
+                  name: paralus-db
+                  key: DSN
+            - name: KRATOS_PROVIDER_CFG
+              value: "/etc/kratos/providers.yaml"
+    extraArgs:
+      - --config
+      - /etc/kratos/providers.yaml
+      # this loads the extra config to override hook configuration
+      - --config
+      - /etc/kratos/hooks/kratos-config-hooks.yaml
+    extraVolumes:
+      - name: other-configs
+        emptyDir: {}
+      # loading volume from kratos config hook configmap
+      - name: kratos-config-hooks
+        configMap:
+            name: kratos-config-hooks
+            defaultMode: 420
+    extraVolumeMounts:
+      - name: other-configs
+        mountPath: /etc/kratos
+      # content of the hook config map data
+      - name: kratos-config-hooks
+        mountPath: /etc/kratos/hooks/kratos-config-hooks.yaml
+        subPath: kratos-config-hooks.yaml
+    extraInitContainers: |
+        - name: create-file
+          image: "busybox:latest"
+          command: ['sh', '-c', 'touch /etc/kratos/providers.yaml']
+          volumeMounts:
+            - name: other-configs
+              mountPath: /etc/kratos
+        - name: create-login-hook-jsonnetfile
+          image: "busybox:latest"
+          command: ['sh', '-c', 'echo "function(ctx) { user_id: ctx.identity.id }" > /etc/kratos/body.jsonnet']
+          volumeMounts:
+            - name: other-configs
+              mountPath: /etc/kratos
+
+elasticsearch:
+  replicas: 1
+  minimumMasterNodes: 1
+
+postgresql:
+  dbAddr: ""
+  # -- When `deploy.postgresql.enable` is true postgres instance is
+  # created with this credentials.
+  auth:
+    existingSecret: postgresql
+    enablePostgresUser: false
+    username: "admindbuser"
+    password: "admindbpassword"
+    database: "admindb"
+
+# -- the chart will overwrite some values of filebear subchart.
+# @default -- filebeat subchart overwrite
+filebeat:
+  daemonset:
+    filebeatConfig:
+      filebeat.yml: |
+        setup.ilm.enabled: false
+        filebeat.module: {}
+        filebeat.inputs: {}
+        filebeat.autodiscover:
+          providers:
+            - type: kubernetes
+              templates:
+                - condition:
+                    equals:
+                      kubernetes.container.name: paralus-tail
+                  config:
+                    - type: container
+                      json.add_error_key: true
+                      json.expand_keys: true
+                      fields:
+                        paralus.component: system
+                      processors:
+                        - timestamp:
+                            field: json.timestamp
+                            layouts:
+                              - "2006-01-02T15:04:05.999999999Z"
+                            test:
+                              - "2022-04-21T11:14:13.538105978Z"
+                      paths:
+                        - /var/log/containers/*-${data.kubernetes.container.id}.log
+                - condition:
+                    equals:
+                      kubernetes.container.name: prompt-tail
+                  config:
+                    - type: container
+                      json.add_error_key: true
+                      json.expand_keys: true
+                      fields:
+                        paralus.component: prompt
+                      processors:
+                        - timestamp:
+                            field: json.timestamp
+                            layouts:
+                              - "2006-01-02T15:04:05.999999999Z"
+                            test:
+                              - "2022-04-21T11:14:13.538105978Z"
+                      paths:
+                        - /var/log/containers/*-${data.kubernetes.container.id}.log
+                - condition:
+                    equals:
+                      kubernetes.container.name: relay-tail
+                  config:
+                    - type: container
+                      json.add_error_key: true
+                      json.expand_keys: true
+                      fields:
+                        paralus.component: relay
+                      processors:
+                        - drop_event:
+                            when:
+                              has_fields: ['json.caller']  # these will be application logs
+                        - timestamp:
+                            field: json.ts
+                            layouts:
+                              - "2006-01-02T15:04:05.999999999Z"
+                            test:
+                              - "2022-04-21T11:14:13.538105978Z"
+                      paths:
+                        - /var/log/containers/*-${data.kubernetes.container.id}.log
+
+        processors:
+          - add_cloud_metadata: ~
+          - add_kubernetes_metadata:
+              in_cluster: false
+
+        output.file:
+          enabled: false
+
+        output.elasticsearch:
+          index: "ralog-%{[fields.paralus.component]}-%{+yyyy.MM.dd}"
+          hosts: ['${ELASTICSEARCH_HOST:elasticsearch-master}:${ELASTICSEARCH_PORT:9200}']
+          # username: ${ELASTICSEARCH_USERNAME} # uncomment this for username
+          # password: ${ELASTICSEARCH_PASSWORD} # uncomment this for password
+
+        setup:
+          template:
+            name: ralog-template
+            overwrite: true
+            pattern: ralog-*
+            append_fields:
+              - name: json.timestamp
+                type: date
+              - name: json.ts
+                type: date
+
+fluent-bit:
+  existingConfigMap: "fluentbit-config"
+
+# -- the chart will overwrite some values of contour subchart.
+# @default -- contour subchart overwrite
+contour:
+  contour:
+    # HTTPProxy CR installation failed when CRDs are not present. To
+    # install CRDs before chart installation we manage contour CRDs in
+    # 'crds/' folder as a workaround, till we find better solution to
+    # solve this.
+    # https://github.com/paralus/helm-charts/issues/13
+    manageCRDs: false
+    # Do not create IngressClass resource. We setup HTTPProxy
+    # resources instead.
+    ingressClass:
+      create: false
+
+  envoy:
+    # -- Envoy host ports.
+    hostPorts:
+      http: 80
+      https: 443
+
+    service:
+      # -- Annotations for Envoy service.
+      annotations: {}
+
+      # -- Type of Envoy service to create.
+      type: LoadBalancer
