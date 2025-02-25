@@ -31,7 +31,9 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "Changed charts: $changed"
-            echo "changed_charts=$changed" >> $GITHUB_OUTPUT
+            changed_charts=$(echo "$changed" | tr '\n' ',')
+            changed_charts=${changed_charts%,} # Remove trailing comma
+            echo "changed_charts=$changed_charts" >> $GITHUB_OUTPUT
           fi
 
       - name: Add repositories
@@ -53,7 +55,7 @@ jobs:
       - name: Run helm-unittest on changed charts
         if: steps.list-changed.outputs.changed == 'true'
         run: |
-          IFS=' ' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
+          IFS=',' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
           for chart in "${CHART_ARRAY[@]}"; do
             echo "Testing chart: $chart"
             cd "$chart"
