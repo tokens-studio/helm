@@ -16,14 +16,13 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     condition: postgresql.enabled
 annotations:
-     artifacthub.io/valuesSchema: "true"
-     licenses: Apache-2.0
-     artifacthub.io/category: monitoring-logging
-     artifacthub.io/signKey: |
-      fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
-      url: https://keybase.io/tokensstudio/pgp_keys.asc
+  artifacthub.io/valuesSchema: "true"
+  licenses: Apache-2.0
+  artifacthub.io/category: monitoring-logging
+  artifacthub.io/signKey: |
+    fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+    url: https://keybase.io/tokensstudio/pgp_keys.asc
 
-     
 keywords:
   - on-call
   - scheduling
