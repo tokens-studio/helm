@@ -4,3 +4,4 @@ target-branch: master
 chart-dirs:
   - charts
 use-helmignore: true
+validate-maintainers: false

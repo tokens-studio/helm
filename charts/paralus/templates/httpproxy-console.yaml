@@ -1,0 +1,53 @@
+{{- if .Values.deploy.contour.enable -}}
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: console
+  labels:
+    {{- include "ztka.labels" . | nindent 4 }}
+    app.kubernetes.io/component: networking
+spec:
+  virtualhost:
+    fqdn: {{ include "ztka.consoleFQDN" . | quote }}
+    {{- with .Values.deploy.contour.tls }}
+    tls:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  routes:
+    - services:
+      - name: paralus
+        port: 11000
+      conditions:
+      - prefix: /auth
+    - services:
+      - name: paralus
+        port: 11000
+      conditions:
+      - prefix: /event
+    - services:
+      - name: paralus
+        port: 11000
+      conditions:
+      - prefix: /infra
+    - services:
+      - name: paralus
+        port: 11000
+      conditions:
+      - prefix: /v2/sentry
+    - services:
+      - name: prompt
+        port: 7009
+      conditions:
+      - prefix: /v2/debug/prompt
+      enableWebsockets: true
+    - services:
+      - name: dashboard
+        port: 80
+      conditions:
+      - prefix: /
+    - services:
+      - name: {{.Release.Name}}-kratos-public
+        port: 80
+      conditions:
+      - prefix: /self-service
+{{- end -}}
