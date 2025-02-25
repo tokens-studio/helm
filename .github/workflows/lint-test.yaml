@@ -55,7 +55,7 @@ jobs:
       - name: Run helm-unittest on changed charts
         if: steps.list-changed.outputs.changed == 'true'
         run: |
-          IFS=' ' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
+          IFS=',' read -ra CHART_ARRAY <<< "${{ steps.list-changed.outputs.changed_charts }}"
           for chart in "${CHART_ARRAY[@]}"; do
             echo "Testing chart: $chart"
             cd "$chart"
