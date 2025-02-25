@@ -191,7 +191,7 @@ hooks:
 auditLogs:
   # -- database or elasticsearch for storing audit logs
   # -- database(postgres) by default
-  storage: "database"  
+  storage: "database"
 
 deploy:
   kratos:
@@ -231,7 +231,7 @@ deploy:
     # -- Postgresql username. Required when `deploy.postgresql.enable`
     # is unset and dsn is not specified.
     username: ""
-    # -- Postgresql password. Required when `deploy.postgresql.enable`  
+    # -- Postgresql password. Required when `deploy.postgresql.enable`
     # is unset and dsn is not specified.
     password: ""
     # -- Postgresql database name. Required when
@@ -431,7 +431,7 @@ kratos:
           configMapKeyRef:
             name: kratos-config
             key: selfservice_flows_error_ui_url
-      
+
     # OIDC Provider config synchronizer as sidecar to Kratos
     extraContainers: |
         - name: synchronizer
@@ -459,8 +459,8 @@ kratos:
       # loading volume from kratos config hook configmap
       - name: kratos-config-hooks
         configMap:
-            name: kratos-config-hooks
-            defaultMode: 420
+          name: kratos-config-hooks
+          defaultMode: 420
     extraVolumeMounts:
       - name: other-configs
         mountPath: /etc/kratos
