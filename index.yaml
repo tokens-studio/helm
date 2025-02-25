@@ -10,6 +10,46 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: v0.32.0
+    created: "2025-02-25T09:21:56.851515801Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 15.x.x
+    description: Goalert is an open source IRM solution
+    digest: d2a79f6f9c13ef7cc7f1ffdd6e274082d061df0af20eaf240027df3967dd09ab
+    home: https://github.com/target/goalert
+    icon: https://raw.githubusercontent.com/target/goalert/master/web/src/app/public/icons/favicon-128.png
+    keywords:
+    - on-call
+    - scheduling
+    - escalations
+    - notifications
+    - alerting
+    - incident-response
+    - sms
+    - voice-calls
+    - automation
+    - irm
+    - incident-management
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: goalert
+    sources:
+    - https://github.com/target/goalert
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.5/goalert-0.0.5.tgz
+    version: 0.0.5
+  - annotations:
+      artifacthub.io/category: monitoring-logging
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "true"
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: v0.32.0
     created: "2024-10-21T14:45:57.79058306Z"
     dependencies:
     - condition: postgresql.enabled
@@ -155,6 +195,28 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/goalert-0.0.1/goalert-0.0.1.tgz
     version: 0.0.1
+  secrets:
+  - annotations:
+      artifacthub.io/category: security
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "false"
+      licenses: MIT
+    apiVersion: v2
+    created: "2025-02-25T09:21:57.078135504Z"
+    description: Secret support using helm.
+    digest: af5f2bca89655c6b61e73ec4c290bfae7a1eceec7141fee850c1ddd7b95b8425
+    home: https://tokens.studio/
+    icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: secrets
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/secrets-1.0.0/secrets-1.0.0.tgz
+    version: 1.0.0
   supabase:
   - annotations:
       artifacthub.io/category: integration-delivery
@@ -313,4 +375,43 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
     version: 0.0.1
-generated: "2024-12-02T09:31:35.450943964Z"
+  ztka:
+  - apiVersion: v2
+    appVersion: v0.2.8
+    created: "2025-02-25T09:21:57.317351741Z"
+    dependencies:
+    - condition: deploy.kratos.enable
+      name: kratos
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.29.0
+    - condition: deploy.elasticsearch.enable
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.postgresql.enable
+      name: postgresql
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 11.1.9
+    - condition: deploy.filebeat.enable
+      name: filebeat
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.fluentbit.enable
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.20.8
+    - condition: deploy.contour.enable
+      name: contour
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 7.8.0
+    description: A Helm chart for Paralus ZTKA.
+    digest: 1396735b852914979f0aa5ffff3e28d2edc2685e24578d6d55742ec0fa583c31
+    maintainers:
+    - name: Paralus Team
+    - name: Andrew At Hyma
+    name: ztka
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/ztka-0.3.0/ztka-0.3.0.tgz
+    version: 0.3.0
+generated: "2025-02-25T09:21:57.317391134Z"
