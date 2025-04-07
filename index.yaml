@@ -198,6 +198,44 @@ entries:
   paralus:
   - apiVersion: v2
     appVersion: v0.2.8
+    created: "2025-04-07T15:03:47.343355569Z"
+    dependencies:
+    - condition: deploy.kratos.enable
+      name: kratos
+      repository: https://k8s.ory.sh/helm/charts
+      version: 0.29.0
+    - condition: deploy.elasticsearch.enable
+      name: elasticsearch
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.postgresql.enable
+      name: postgresql
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 11.1.9
+    - condition: deploy.filebeat.enable
+      name: filebeat
+      repository: https://helm.elastic.co
+      version: 7.17.1
+    - condition: deploy.fluentbit.enable
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.20.8
+    - condition: deploy.contour.enable
+      name: contour
+      repository: https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami
+      version: 7.8.0
+    description: A Helm chart for Paralus ZTKA.
+    digest: caaa06c74794c7ce4d9ef3925b97c66867100792f749ed62a2f8399f047bdb5a
+    maintainers:
+    - name: Paralus Team
+    - name: Andrew At Hyma
+    name: paralus
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/paralus-0.3.6/paralus-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v2
+    appVersion: v0.2.8
     created: "2025-02-25T13:05:28.169568851Z"
     dependencies:
     - condition: deploy.kratos.enable
@@ -386,6 +424,37 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/paralus-0.3.2/paralus-0.3.2.tgz
     version: 0.3.2
+  pgbouncer:
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/license: MIT
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "false"
+    apiVersion: v2
+    appVersion: 1.24.0
+    created: "2025-04-07T15:03:47.491601196Z"
+    description: A Helm chart for deploying PgBouncer, a PostgreSQL connection pooler,
+      on Kubernetes
+    digest: 5c2772f903f6ba949d9e6e6be0e0bb713ae60ab45a04a2a8ffae1b79239328fd
+    home: https://github.com/tokens-studio/helm
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    keywords:
+    - pgbouncer
+    - postgresql
+    - kubernetes
+    kubeVersion: '>= 1.20.0-0'
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: pgbouncer
+    sources:
+    - https://github.com/tokens-studio/helm/tree/master/charts/pgbouncer
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/pgbouncer-1.0.0/pgbouncer-1.0.0.tgz
+    version: 1.0.0
   secrets:
   - annotations:
       artifacthub.io/category: security
@@ -409,6 +478,27 @@ entries:
     - https://github.com/tokens-studio/helm/releases/download/secrets-1.0.0/secrets-1.0.0.tgz
     version: 1.0.0
   supabase:
+  - annotations:
+      artifacthub.io/category: integration-delivery
+      artifacthub.io/signKey: |
+        fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+        url: https://keybase.io/tokensstudio/pgp_keys.asc
+      artifacthub.io/valuesSchema: "false"
+      licenses: Apache-2.0
+    apiVersion: v2
+    created: "2025-04-07T15:03:47.629091583Z"
+    description: The open source Firebase alternative.
+    digest: 7f9503e99530d3da94ff4f8d4cf2d4505f2e5a616a140fe0641fa8150e35cd48
+    home: https://supabase.com/
+    icon: https://avatars.githubusercontent.com/u/54469796?s=280&v=4
+    maintainers:
+    - email: andrew@hyma.io
+      name: Andrew
+    name: supabase
+    type: application
+    urls:
+    - https://github.com/tokens-studio/helm/releases/download/supabase-0.1.1/supabase-0.1.1.tgz
+    version: 0.1.1
   - annotations:
       artifacthub.io/category: integration-delivery
       artifacthub.io/signKey: |
@@ -566,4 +656,4 @@ entries:
     urls:
     - https://github.com/tokens-studio/helm/releases/download/supabase-0.0.1/supabase-0.0.1.tgz
     version: 0.0.1
-generated: "2025-02-25T13:05:28.169602293Z"
+generated: "2025-04-07T15:03:47.629153458Z"
