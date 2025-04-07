@@ -4,13 +4,15 @@ services:
     image: quay.io/helmpack/chart-testing
     volumes:
       - ./:/charts
+      - ./scripts:/scripts
     working_dir: /charts
-    entrypoint: ct lint --config ct.yaml
+    entrypoint: sh /scripts/add-repos.sh
   test:
     image: quay.io/helmpack/chart-testing
     volumes:
       - ./:/charts
     working_dir: /charts
-    entrypoint: ct install  --config ct.yaml
+    entrypoint: ct install --config ct.yaml
     # Note you will need to expose your kubernetes service to the container
     network_mode: host
+
