@@ -286,5 +286,3 @@ probes:
     timeoutSeconds: 3
     failureThreshold: 30
     successThreshold: 1
-
-
