@@ -1,0 +1,26 @@
+suite: Test Service
+templates:
+  - service.yaml
+tests:
+  - it: should create default service
+    asserts:
+      - isKind:
+          of: Service
+      - equal:
+          path: spec.type
+          value: ClusterIP
+      - equal:
+          path: spec.ports[0].port
+          value: 5432
+      - equal:
+          path: spec.ports[0].targetPort
+          value: psql
+
+  - it: should set custom service type
+    set:
+      service:
+        type: LoadBalancer
+    asserts:
+      - equal:
+          path: spec.type
+          value: LoadBalancer

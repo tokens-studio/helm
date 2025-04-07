@@ -1,0 +1,32 @@
+suite: Test PodDisruptionBudget
+templates:
+  - pdb.yaml
+tests:
+  - it: should not create pdb by default
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create pdb with minAvailable
+    set:
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 1
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.minAvailable
+          value: 1
+
+  - it: should create pdb with maxUnavailable
+    set:
+      podDisruptionBudget:
+        enabled: true
+        maxUnavailable: 1
+    asserts:
+      - isKind:
+          of: PodDisruptionBudget
+      - equal:
+          path: spec.maxUnavailable
+          value: 1

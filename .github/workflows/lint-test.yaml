@@ -59,7 +59,7 @@ jobs:
           for chart in "${CHART_ARRAY[@]}"; do
             echo "Testing chart: $chart"
             cd "$chart"
-            helm unittest . || exit 1
+            helm unittest . -q -f tests/**/*.yml || exit 1
             cd $GITHUB_WORKSPACE
           done
 
