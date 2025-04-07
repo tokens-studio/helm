@@ -1,0 +1,44 @@
+suite: Test ConfigMap
+templates:
+  - configmap.yaml
+tests:
+  - it: should create default configmap
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: listen_port = 5432
+
+  - it: should set custom database configuration
+    set:
+      config:
+        databases:
+          testdb:
+            host: testhost
+            port: 5432
+        pgbouncer:
+          pool_mode: transaction
+          max_client_conn: 1000
+    asserts:
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: testdb = host=testhost port=5432
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: pool_mode = transaction
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: max_client_conn = 1000
+
+  - it: should include default pgbouncer settings
+    asserts:
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: listen_addr = \*
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: auth_file = /etc/userlist/userlist\.txt
+      - matchRegex:
+          path: data["pgbouncer.ini"]
+          pattern: server_reset_query = SELECT pg_advisory_unlock_all\(\)

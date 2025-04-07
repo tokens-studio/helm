@@ -1,0 +1,36 @@
+{{ template "chart.header" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/tokens-studio)](https://artifacthub.io/packages/search?repo=tokens-studio)
+
+
+## Prerequisites
+
+- Kubernetes 1.12+
+- Helm 3.0+
+
+## Installation
+
+To install the chart with the release name `my-pgbouncer`:
+
+
+```bash
+helm repo add tokens-studio https://tokens-studio.github.io/helm
+helm install my-pgbouncer tokens-studio/pgbouncer
+```
+
+This command deploys a PgBouncer instance with default configuration.
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+## Provenance
+
+All Helm releases are signed with out PGP key
+
+## Notes
+
+As per the current documentation, you will need to manually create the initial admin users post-install.
+
+
+{{ template "helm-docs.versionFooter" . }}

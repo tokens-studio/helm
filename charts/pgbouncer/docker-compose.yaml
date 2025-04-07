@@ -1,0 +1,13 @@
+version: '3'
+services:
+  unit-test:
+    image: helmunittest/helm-unittest
+    volumes:
+      - ./:/app
+    working_dir: /app
+    entrypoint: helm unittest . -q -f tests/**/*.yml
+  docs:
+    image: jnorwood/helm-docs
+    volumes:
+      - ./:/helm-docs
+    working_dir: /helm-docs

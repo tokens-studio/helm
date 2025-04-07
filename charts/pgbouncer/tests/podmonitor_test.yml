@@ -1,0 +1,19 @@
+suite: Test PodMonitor
+templates:
+  - podmonitor.yaml
+tests:
+  - it: should not create podmonitor by default
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should create podmonitor when enabled
+    set:
+      pgbouncerExporter:
+        podMonitor: true
+    asserts:
+      - isKind:
+          of: PodMonitor
+      - equal:
+          path: spec.podMetricsEndpoints[0].port
+          value: exporter

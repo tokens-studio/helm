@@ -1,0 +1,62 @@
+suite: Test Deployment
+templates:
+  - deployment.yaml
+  - configmap.yaml
+tests:
+  - it: should create default deployment
+    template: deployment.yaml
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: bitnami/pgbouncer-docker:1.24.0
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 5432
+
+  - it: should set custom replicas
+    template: deployment.yaml
+    set:
+      replicaCount: 3
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 3
+
+  - it: should set resources
+    template: deployment.yaml
+    set:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 200m
+          memory: 256Mi
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+
+  - it: should enable metrics sidecar when configured
+    template: deployment.yaml
+    set:
+      pgbouncerExporter:
+        enabled: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[1].name
+          value: exporter
+      - equal:
+          path: spec.template.spec.containers[1].image
+          value: prometheuscommunity/pgbouncer-exporter:v0.10.2

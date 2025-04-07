@@ -1,0 +1,26 @@
+apiVersion: v2
+name: pgbouncer
+description: A Helm chart for deploying PgBouncer, a PostgreSQL connection pooler, on Kubernetes
+type: application
+version: 1.0.0
+appVersion: 1.24.0
+kubeVersion: ">= 1.20.0-0"
+icon: https://www.postgresql.org/media/img/about/press/elephant.png
+keywords:
+  - pgbouncer
+  - postgresql
+  - kubernetes
+maintainers:
+  - email: andrew@hyma.io
+    name: Andrew
+home: https://github.com/tokens-studio/helm
+sources:
+  - https://github.com/tokens-studio/helm/tree/master/charts/pgbouncer
+annotations:
+  artifacthub.io/license: "MIT"
+  artifacthub.io/valuesSchema: "false"
+  artifacthub.io/category: integration-delivery
+  artifacthub.io/signKey: |
+      fingerprint: 2F0E91FEE1AC982E/2F0E91FEE1AC982E
+      url: https://keybase.io/tokensstudio/pgp_keys.asc
+
