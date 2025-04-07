@@ -15,8 +15,9 @@ This chart bootstraps the Paralus deployment on a [Kubernetes](http://kubernetes
 ## Get Repo Info
 
 ```console
-helm repo add paralus https://paralus.github.io/helm-charts
+helm repo add tokensstudio https://tokens-studio.github.io/helm/
 helm repo update
+
 ```
 
 ## Install Chart
@@ -24,7 +25,7 @@ helm repo update
 **Important:** only helm3 is supported
 
 ```console
-helm install [RELEASE_NAME] paralus/ztka -n paralus  \
+helm install [RELEASE_NAME] tokensstudio/ztka -n paralus  \
 --create-namespace \
 --set deploy.postgresql.enable=true
 ```
