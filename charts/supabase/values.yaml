@@ -1209,3 +1209,15 @@ minio:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+pgbouncer:
+  enabled: true
+  image:
+    repository: bitnami/pgbouncer
+    tag: "1.24.0"
+    pullPolicy: IfNotPresent
+  poolMode: "transaction"
+  maxClientConn: "1000"
+  defaultPoolSize: "20"
+  resources: {}
+

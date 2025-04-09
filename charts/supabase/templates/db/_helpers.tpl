@@ -16,9 +16,9 @@ If release name contains chart name it will be used as a full name.
 {{- else }}
 {{- $name := default (print .Chart.Name "-db") .Values.db.nameOverride }}
 {{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s%s" (.Release.Name | trunc 57 | trimSuffix "-") (ternary "" "-direct" .Values.pgbouncer.enabled) }}
 {{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s%s" .Release.Name $name (ternary "" "-direct" .Values.pgbouncer.enabled) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -41,3 +41,4 @@ Create the name of the service account to use
 {{- default "default" .Values.db.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
