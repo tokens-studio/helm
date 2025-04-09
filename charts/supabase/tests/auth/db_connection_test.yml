@@ -1,0 +1,106 @@
+suite: test auth db connection configuration
+templates:
+  - templates/auth/deployment.yaml
+
+tests:
+  - it: should use internal db hostname when db is enabled
+    set:
+      auth:
+        enabled: true
+        environment:
+          DB_PORT: "5432"
+      db:
+        enabled: true
+      Release:
+        Name: RELEASE-NAME
+        Namespace: default
+      Chart:
+        Name: supabase
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DB_HOST
+            value: RELEASE-NAME-supabase-db
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DB_HOST
+            value: RELEASE-NAME-supabase-db
+
+  - it: should use external db hostname when db is disabled
+    set:
+      auth:
+        enabled: true
+        environment:
+          DB_HOST: "external-db.example.com"
+          DB_PORT: "5432"
+      db:
+        enabled: false
+      Release:
+        Name: RELEASE-NAME
+        Namespace: default
+      Chart:
+        Name: supabase
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DB_HOST
+            value: external-db.example.com
+
+  - it: should use db name with direct suffix when pgbouncer is disabled
+    set:
+      auth:
+        enabled: true
+        environment:
+          DB_PORT: "5432"
+      db:
+        enabled: true
+      pgbouncer:
+        enabled: false
+      Release:
+        Name: RELEASE-NAME
+        Namespace: default
+      Chart:
+        Name: supabase
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DB_HOST
+            value: RELEASE-NAME-supabase-db-direct
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DB_HOST
+            value: RELEASE-NAME-supabase-db-direct
+
+  - it: should respect db fullnameOverride
+    set:
+      auth:
+        enabled: true
+        environment:
+          DB_PORT: "5432"
+      db:
+        enabled: true
+        fullnameOverride: custom-database
+      Release:
+        Name: RELEASE-NAME
+        Namespace: default
+      Chart:
+        Name: supabase
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DB_HOST
+            value: custom-database
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DB_HOST
+            value: custom-database
+
+
+

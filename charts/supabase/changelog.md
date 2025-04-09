@@ -1,3 +1,10 @@
+## 1.0.0
+
+Added PG bouncer to help prevent the service from being overwhelmed with calls to the database. This is a breaking change as the database service name has changed. 
+
+The previous direct connection can still be acccessed through  the `<SERVICE_NAME>-direct` service.
+
+
 ## 0.1.1
 
 Fixes incorrect hardcoding of the kong config for functions

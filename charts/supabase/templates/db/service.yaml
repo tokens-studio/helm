@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: {{  .Release.Namespace }}
-  name: {{ include "supabase.db.fullname" . }}
+  name: {{ include "supabase.db.fullname" . }}-direct
   labels:
     {{- include "supabase.labels" . | nindent 4 }}
+    app.kubernetes.io/component: database
 spec:
   type: {{ .Values.db.service.type }}
   ports:
@@ -16,3 +16,4 @@ spec:
   selector:
     {{- include "supabase.db.selectorLabels" . | nindent 4 }}
 {{- end }}
+
